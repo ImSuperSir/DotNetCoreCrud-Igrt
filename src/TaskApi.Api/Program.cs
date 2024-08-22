@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using TaskApi.Application.Services;
 using TaskApi.Core.Interfaces;
 using TaskApi.Infrastructure.Data;
+using TaskApi.Infrastructure.Extensions;
+
 // using TaskApi.Infrastructure.Extensions;
 using TasksApi.Infrastructure.Extensions;
 using TasksApi.Infrastructure.Repositories;
@@ -24,7 +26,7 @@ builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITaskService, TaskService>();
-// builder.Services.AddLocalJwtAuthentication(builder.Configuration);
+builder.Services.AddLocalJwtAuthentication(builder.Configuration);
 builder.Services.AddPersistence(builder.Configuration);
 
 
@@ -44,7 +46,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
+app.UseAuthentication();  // Add this line witn identity
 app.UseAuthorization();
 
 app.MapControllers();

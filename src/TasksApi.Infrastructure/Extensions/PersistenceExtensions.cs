@@ -12,6 +12,7 @@ public static class PersistenceExtensions
         services.AddDbContext<TaskDbContext>(options =>
         {
             options.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
+            //options.UseSqlServer(configuration.GetConnectionString("SqlServerConnection"));
         });
 
         return services;
