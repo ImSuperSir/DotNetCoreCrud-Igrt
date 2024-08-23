@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using TaskApi.Api.ServiceDtos;
 using TaskApi.Core.Entities;
 using TaskApi.Core.Interfaces;
+using TasksApi.Infrastructure.Roles;
 
 namespace TaskApi.Api.Controllers
 {
@@ -38,6 +40,7 @@ namespace TaskApi.Api.Controllers
             return Ok(task.AsDto());
         }
 
+        [Authorize(Roles = UserRoles.User)]
         [HttpPost(Name = "CreateTask")]
         public async Task<IActionResult> CreateTask([FromBody] CreateTaskDto task)
         {
@@ -46,7 +49,9 @@ namespace TaskApi.Api.Controllers
             return CreatedAtAction(nameof(GetTask), new { id = lTask.Id }, task);
         }
 
+
         [HttpPut("{id}", Name = "UpdateTask")]
+        [Authorize(Roles = UserRoles.User)]
         public async Task<IActionResult> UpdateTask(Guid id, [FromBody] UpdateTaskDto task)
         {
 
@@ -70,6 +75,7 @@ namespace TaskApi.Api.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = UserRoles.Admin + "," + UserRoles.Owner)]
         [HttpDelete("{id}", Name = "DeleteTask")]
         public async Task<IActionResult> DeleteTask(Guid id)
         {
@@ -83,6 +89,7 @@ namespace TaskApi.Api.Controllers
         }
 
         [HttpPatch]
+        [Authorize(Roles = UserRoles.User)]
         public async Task<IActionResult> PatchTask(Guid id, [FromBody] JsonPatchDocument<MyTask> patch)
         {
             if (patch == null)
