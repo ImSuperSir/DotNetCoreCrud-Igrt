@@ -4,13 +4,13 @@ using TaskApi.Core.Entities; // Add a reference to the Microsoft.EntityFramework
 
 namespace TaskApi.Infrastructure.Data;
 
-public class TaskDbContext : IdentityDbContext
+public class TaskDbContext : IdentityDbContext<ApplicationUser>
 {
     public TaskDbContext(DbContextOptions<TaskDbContext> options) : base(options)
     {
     }
 
-    override protected void OnModelCreating(ModelBuilder modelBuilder)
+    override protected void OnModelCreating(ModelBuilder modelBuilder) 
     {
 
         base.OnModelCreating(modelBuilder);  //cause of identity or will not work

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using TaskApi.Api.Dtos;
+using TaskApi.Core.Entities;
 using TasksApi.Infrastructure.Roles;
 
 namespace TaskApi.Api.Controllers
@@ -15,16 +16,16 @@ namespace TaskApi.Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _UserManager;
-        private readonly SignInManager<IdentityUser> _SignInManager;
+        private readonly UserManager<ApplicationUser> _UserManager;
+        private readonly SignInManager<ApplicationUser> _SignInManager;
 
         // private readonly IHttpContextAccessor _HttpContextAccessor;
         private readonly RoleManager<IdentityRole> _RoleManager;
 
         private readonly IConfiguration _Configuration;
 
-        public AuthController(UserManager<IdentityUser> userManager
-                , SignInManager<IdentityUser> signInManager
+        public AuthController(UserManager<ApplicationUser> userManager
+                , SignInManager<ApplicationUser> signInManager
                 , RoleManager<IdentityRole> roleManager
                 , IConfiguration configuration)
         {
@@ -61,10 +62,13 @@ namespace TaskApi.Api.Controllers
                 return BadRequest("User already exists");
             }
 
-            var user = new IdentityUser
+            var user = new ApplicationUser
             {
                 UserName = model.UserName,
-                Email = model.Email
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                SecurityStamp = Guid.NewGuid().ToString()
             };
             var result = await _UserManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -108,6 +112,8 @@ namespace TaskApi.Api.Controllers
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
             claims.Add(new Claim(ClaimTypes.Name, user.UserName!));
             claims.Add(new Claim("JWTID", Guid.NewGuid().ToString()));
+            claims.Add(new Claim("FirstName", user.FirstName!));
+            claims.Add(new Claim("LastName", user.LastName!));
 
             foreach (var UserRoles in await _UserManager.GetRolesAsync(user))
             {
