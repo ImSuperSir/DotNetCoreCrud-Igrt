@@ -24,3 +24,8 @@ dotnet ef migrations add AddIdeintity -p .\TasksApi.Infrastructure\TasksApi.Infr
 
 Paso 2
 dotnet ef database update -p .\TasksApi.Infrastructure\TasksApi.Infrastructure.csproj -s .\TaskApi.Api\TaskApi.Api.csproj
+
+
+#...........................
+#To update a identity class with new fields (Core project)
+dotnet add package Microsoft.AspNetCore.Identity

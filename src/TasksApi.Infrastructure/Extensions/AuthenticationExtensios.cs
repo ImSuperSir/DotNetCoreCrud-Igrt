@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using TaskApi.Core.Entities;
 using TaskApi.Infrastructure.Data;
 // using Microsoft.IdentityModel.Tokens;
 
@@ -15,7 +16,7 @@ namespace TaskApi.Infrastructure.Extensions
     {
         public static IServiceCollection AddLocalJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<TaskDbContext>()
                 .AddDefaultTokenProviders();
 
